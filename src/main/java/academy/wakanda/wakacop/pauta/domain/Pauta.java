@@ -1,6 +1,9 @@
 package academy.wakanda.wakacop.pauta.domain;
 
+import academy.wakanda.wakacop.pauta.application.api.NovaPastaRequest;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -10,6 +13,7 @@ import java.util.UUID;
 @Getter
 @ToString
 @Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Pauta {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,4 +23,11 @@ public class Pauta {
     private String descricao;
     private UUID idAssociadoAutor;
     private LocalDateTime dataCricao;
+
+    public Pauta(NovaPastaRequest novaPasta) {
+        this.titulo = novaPasta.getTitulo();
+        this.descricao = novaPasta.getDescricao();
+        this.idAssociadoAutor = novaPasta.getIdAssociadoAutor();
+        this.dataCricao = LocalDateTime.now();
+    }
 }
