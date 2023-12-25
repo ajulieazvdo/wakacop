@@ -4,11 +4,16 @@ import academy.wakanda.wakacop.pauta.application.service.PautaService;
 import academy.wakanda.wakacop.pauta.domain.Pauta;
 import academy.wakanda.wakacop.sessaovotacao.application.api.SessaoAberturaRequest;
 import academy.wakanda.wakacop.sessaovotacao.application.api.SessaoAberturaResponse;
+import academy.wakanda.wakacop.sessaovotacao.application.api.VotoRequest;
+import academy.wakanda.wakacop.sessaovotacao.application.api.VotoResponse;
 import academy.wakanda.wakacop.sessaovotacao.application.repository.SessaoAberturaRepository;
 import academy.wakanda.wakacop.sessaovotacao.domain.SessaoVotacao;
+import academy.wakanda.wakacop.sessaovotacao.domain.VotoPauta;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @Log4j2
@@ -24,5 +29,15 @@ public class SessaoVotacaoApplicationService implements SessaoVotacaoService {
         SessaoVotacao sessaoVotacao = sessaoAberturaRepository.salvaSessao(new SessaoVotacao(sessaoAberturaRequest, pauta));
         log.info("[finaliza] SessaoVotacaoApplicationService - abreSessao");
         return new SessaoAberturaResponse(sessaoVotacao);
+    }
+
+    @Override
+    public VotoResponse recebeVoto(UUID idSessao, VotoRequest novoVoto) {
+        log.info("[inicia] SessaoVotacaoApplicationService - recebeVoto");
+        SessaoVotacao sessao = sessaoAberturaRepository.buscaPorId(idSessao);
+        VotoPauta voto = sessao.recebeVoto(novoVoto);
+        sessaoAberturaRepository.salvaSessao(sessao);
+        log.info("[finaliza] SessaoVotacaoApplicationService - recebeVoto");
+        return new VotoResponse(voto);
     }
 }
