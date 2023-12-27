@@ -1,12 +1,10 @@
 package academy.wakanda.wakacop.sessaovotacao.domain;
 
-import academy.wakanda.wakacop.pauta.domain.Pauta;
 import academy.wakanda.wakacop.sessaovotacao.application.api.VotoRequest;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -24,7 +22,6 @@ public class VotoPauta {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sessao_votacao_id")
     private SessaoVotacao sessaoVotacao;
-    @CPF
     private String cpfAssociado;
     @Enumerated(EnumType.STRING)
     private OpcaoVoto opcaoVoto;
