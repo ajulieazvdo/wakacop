@@ -23,7 +23,6 @@ public class VotoPauta {
     @JoinColumn(name = "sessao_votacao_id")
     private SessaoVotacao sessaoVotacao;
     private String cpfAssociado;
-    @Enumerated(EnumType.STRING)
     private OpcaoVoto opcaoVoto;
     private LocalDateTime momentoVoto;
 
@@ -38,7 +37,7 @@ public class VotoPauta {
         return this.sessaoVotacao.getId();
     }
 
-    public boolean opcaoIgual(OpcaoVoto opcao){
+    public boolean opcaoIgual(OpcaoVoto opcao) {
         return this.opcaoVoto.equals(opcao);
     }
 }

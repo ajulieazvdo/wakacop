@@ -31,6 +31,7 @@ public class SessaoVotacao {
     private StatusSessaoVotacao status;
     private LocalDateTime momentoAbertura;
     private LocalDateTime momentoEncerramento;
+
     @OneToMany(
             mappedBy = "sessaoVotacao",
             cascade = CascadeType.ALL,
@@ -41,12 +42,11 @@ public class SessaoVotacao {
 
     public SessaoVotacao(SessaoAberturaRequest sessaoAberturaRequest, Pauta pauta) {
         this.idPauta = pauta.getId();
-        this.idPauta = sessaoAberturaRequest.getIdPauta();
         this.tempoDuracao = sessaoAberturaRequest.getTempoDuracao().orElse(1);
         this.momentoAbertura = LocalDateTime.now();
         this.momentoEncerramento = momentoAbertura.plusMinutes(this.tempoDuracao);
         this.status = StatusSessaoVotacao.ABERTO;
-        votos = new HashMap<>();
+        this.votos = new HashMap<>();
     }
 
     public VotoPauta recebeVoto(VotoRequest votoRequest, AssociadoService associadoService){
@@ -99,6 +99,7 @@ public class SessaoVotacao {
     public Long getTotalSim() {
         return calculaVotosPorOpcao(OpcaoVoto.SIM);
     }
+
     public Long getTotalNao() {
         return calculaVotosPorOpcao(OpcaoVoto.NAO);
     }

@@ -23,10 +23,10 @@ public class SessaoVotacaoController implements SessaoVotacaoAPI {
 
     @Override
     public VotoResponse recebeVoto(UUID idSessao, VotoRequest novoVoto) {
-        log.info("[inicia] SessaoVotacaoController - recebeVoto");
-        log.info("[idSessao] {}", idSessao);
+        log.debug("[inicia] SessaoVotacaoController - recebeVoto");
+        log.debug("[idSessao] {}", idSessao);
         VotoResponse votoResponse = sessaoVotacaoService.recebeVoto(idSessao, novoVoto);
-        log.info("[finaliza] SessaoVotacaoController - recebeVoto");
+        log.debug("[finaliza] SessaoVotacaoController - recebeVoto");
         return votoResponse;
     }
 
