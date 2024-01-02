@@ -4,7 +4,7 @@ import academy.wakanda.wakacop.associado.application.service.AssociadoService;
 import academy.wakanda.wakacop.pauta.application.service.PautaService;
 import academy.wakanda.wakacop.pauta.domain.Pauta;
 import academy.wakanda.wakacop.sessaovotacao.application.api.*;
-import academy.wakanda.wakacop.sessaovotacao.application.repository.SessaoAberturaRepository;
+import academy.wakanda.wakacop.sessaovotacao.application.repository.SessaoVotacaoRepository;
 import academy.wakanda.wakacop.sessaovotacao.domain.PublicadorResultadoSessao;
 import academy.wakanda.wakacop.sessaovotacao.domain.SessaoVotacao;
 import academy.wakanda.wakacop.sessaovotacao.domain.VotoPauta;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Log4j2
 @RequiredArgsConstructor
 public class SessaoVotacaoApplicationService implements SessaoVotacaoService {
-    private final SessaoAberturaRepository sessaoAberturaRepository;
+    private final SessaoVotacaoRepository sessaoVotacaoRepository;
     private final PautaService pautaService;
     private final AssociadoService associadoService;
     private final PublicadorResultadoSessao publicadorResultadoSessao;
@@ -27,7 +27,7 @@ public class SessaoVotacaoApplicationService implements SessaoVotacaoService {
     public SessaoAberturaResponse abreSessao(SessaoAberturaRequest sessaoAberturaRequest) {
         log.info("[inicia] SessaoVotacaoApplicationService - abreSessao");
         Pauta pauta = pautaService.getPautaPorId(sessaoAberturaRequest.getIdPauta());
-        SessaoVotacao sessaoVotacao = sessaoAberturaRepository.salvaSessao(new SessaoVotacao(sessaoAberturaRequest, pauta));
+        SessaoVotacao sessaoVotacao = sessaoVotacaoRepository.salvaSessao(new SessaoVotacao(sessaoAberturaRequest, pauta));
         log.info("[finaliza] SessaoVotacaoApplicationService - abreSessao");
         return new SessaoAberturaResponse(sessaoVotacao);
     }
@@ -35,9 +35,9 @@ public class SessaoVotacaoApplicationService implements SessaoVotacaoService {
     @Override
     public VotoResponse recebeVoto(UUID idSessao, VotoRequest novoVoto) {
         log.debug("[inicia] SessaoVotacaoApplicationService - recebeVoto");
-        SessaoVotacao sessao = sessaoAberturaRepository.buscaPorId(idSessao);
+        SessaoVotacao sessao = sessaoVotacaoRepository.buscaPorId(idSessao);
         VotoPauta voto = sessao.recebeVoto(novoVoto,associadoService, publicadorResultadoSessao);
-        sessaoAberturaRepository.salvaSessao(sessao);
+        sessaoVotacaoRepository.salvaSessao(sessao);
         log.debug("[finaliza] SessaoVotacaoApplicationService - recebeVoto");
         return new VotoResponse(voto);
     }
@@ -45,9 +45,9 @@ public class SessaoVotacaoApplicationService implements SessaoVotacaoService {
     @Override
     public ResultadoSessaoResponse obtemResultado(UUID idSessao) {
         log.info("[inicia] SessaoVotacaoApplicationService - obtemResultado");
-        SessaoVotacao sessao = sessaoAberturaRepository.buscaPorId(idSessao);
+        SessaoVotacao sessao = sessaoVotacaoRepository.buscaPorId(idSessao);
         ResultadoSessaoResponse resultado = sessao.obtemResultado(publicadorResultadoSessao);
-        sessaoAberturaRepository.salvaSessao(sessao);
+        sessaoVotacaoRepository.salvaSessao(sessao);
         log.info("[finaliza] SessaoVotacaoApplicationService - obtemResultado");
         return resultado;
     }

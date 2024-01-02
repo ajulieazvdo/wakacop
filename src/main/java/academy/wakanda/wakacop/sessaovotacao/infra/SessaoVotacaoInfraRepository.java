@@ -1,19 +1,21 @@
 package academy.wakanda.wakacop.sessaovotacao.infra;
 
 import academy.wakanda.wakacop.handler.APIException;
-import academy.wakanda.wakacop.sessaovotacao.application.repository.SessaoAberturaRepository;
+import academy.wakanda.wakacop.sessaovotacao.application.repository.SessaoVotacaoRepository;
 import academy.wakanda.wakacop.sessaovotacao.domain.SessaoVotacao;
+import academy.wakanda.wakacop.sessaovotacao.domain.StatusSessaoVotacao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 @Log4j2
 @RequiredArgsConstructor
-public class SessaoAberturaInfraRepository implements SessaoAberturaRepository {
+public class SessaoVotacaoInfraRepository implements SessaoVotacaoRepository {
     private final SessaoVotacaoSpringDataJpaRepository sessaoVotacaoSpringDataJpaRepository;
 
     @Override
@@ -31,5 +33,13 @@ public class SessaoAberturaInfraRepository implements SessaoAberturaRepository {
                 .orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Sessão não encontrada!"));
         log.info("[finaliza] SessaoAberturaInfraRepository - buscaPorId");
         return sessao;
+    }
+
+    @Override
+    public List<SessaoVotacao> buscaAbertas() {
+        log.debug("[inicia] SessaoVotacaoInfraRepository - buscaAbertas");
+        List<SessaoVotacao> sessoes = sessaoVotacaoSpringDataJpaRepository.findByStatus(StatusSessaoVotacao.ABERTO);
+        log.debug("[finaliza] SessaoVotacaoInfraRepository - buscaAbertas");
+        return sessoes;
     }
 }
